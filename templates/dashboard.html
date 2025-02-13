@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Мои заявки</h2>
+            <a href="{{ url_for('create_request') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Создать заявку
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Фильтры</h5>
+                <form class="row g-3" method="GET">
+                    <div class="col-md-4">
+                        <label for="status" class="form-label">Статус</label>
+                        <select class="form-select" id="status" name="status">
+                            <option value="">Все статусы</option>
+                            <option value="Новая" {% if request.args.get('status') == 'Новая' %}selected{% endif %}>Новая</option>
+                            <option value="Решена" {% if request.args.get('status') == 'Решена' %}selected{% endif %}>Решена</option>
+                            <option value="Отклонена" {% if request.args.get('status') == 'Отклонена' %}selected{% endif %}>Отклонена</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="category" class="form-label">Категория</label>
+                        <select class="form-select" id="category" name="category">
+                            <option value="">Все категории</option>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}" {% if request.args.get('category')|int == category.id %}selected{% endif %}>
+                                {{ category.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-end">
+                        <button type="submit" class="btn btn-secondary">Применить фильтры</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {% for request in requests %}
+    <div class="col-md-6 mb-4">
+        <div class="card request-card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ request.title }}</h5>
+                <p class="card-text">{{ request.description[:200] }}{% if request.description|length > 200 %}...{% endif %}</p>
+                <div class="mb-3">
+                    <span class="badge {% if request.status == 'Новая' %}bg-primary{% elif request.status == 'Решена' %}bg-success{% else %}bg-danger{% endif %}">
+                        {{ request.status }}
+                    </span>
+                    <span class="badge bg-secondary">{{ request.category.name }}</span>
+                </div>
+                {% if request.before_image %}
+                <div class="mb-3">
+                    <h6>Фото ДО:</h6>
+                    <img src="{{ url_for('static', filename=request.before_image) }}" class="img-fluid image-preview" alt="До">
+                </div>
+                {% endif %}
+                {% if request.after_image %}
+                <div class="mb-3">
+                    <h6>Фото ПОСЛЕ:</h6>
+                    <img src="{{ url_for('static', filename=request.after_image) }}" class="img-fluid image-preview" alt="После">
+                </div>
+                {% endif %}
+                {% if request.rejection_reason %}
+                <div class="mb-3">
+                    <strong>Причина отклонения:</strong>
+                    <p>{{ request.rejection_reason }}</p>
+                </div>
+                {% endif %}
+                <div class="action-buttons">
+                    {% if request.status == 'Новая' %}
+                    <button class="btn btn-danger btn-sm" onclick="if(confirmDelete('Вы уверены, что хотите удалить эту заявку?')) window.location.href='{{ url_for('delete_request', request_id=request.id) }}'">
+                        <i class="fas fa-trash"></i> Удалить
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-footer text-muted">
+                <small>Создано: {{ request.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            У вас пока нет заявок. <a href="{{ url_for('create_request') }}">Создайте первую заявку</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

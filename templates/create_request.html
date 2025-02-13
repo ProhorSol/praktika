@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Создание заявки{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="card">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">Создание новой заявки</h2>
+            <form method="POST" action="{{ url_for('create_request') }}" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Заголовок</label>
+                    <input type="text" class="form-control" id="title" name="title" required
+                           minlength="5" maxlength="200">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="category" class="form-label">Категория</label>
+                    <select class="form-select" id="category" name="category_id" required>
+                        <option value="">Выберите категорию</option>
+                        {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Описание проблемы</label>
+                    <textarea class="form-control" id="description" name="description" rows="4" required
+                              minlength="20"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="before_image" class="form-label">Фотография "ДО"</label>
+                    <input type="file" class="form-control image-input" id="before_image" name="before_image"
+                           accept="image/*" required data-preview-id="beforeImagePreview">
+                    <img id="beforeImagePreview" class="image-preview mt-2" style="display: none;">
+                </div>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary">Создать заявку</button>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+/* Общие стили */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Адаптивные стили для мобильных устройств */
+@media (max-width: 720px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .card {
+        margin-bottom: 15px;
+    }
+    
+    .navbar-brand img {
+        height: 25px;
+    }
+}
+
+/* Стили для десктопов */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+}
+
+/* Анимация для слайдера на главной странице */
+.image-slider {
+    position: relative;
+    overflow: hidden;
+    height: 400px;
+}
+
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.slide.active {
+    opacity: 1;
+}
+
+/* Стили для форм */
+.form-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Стили для карточек заявок */
+.request-card {
+    transition: transform 0.2s;
+}
+
+.request-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Счетчик на главной странице */
+.counter {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #28a745;
+    text-align: center;
+}
+
+/* Стили для кнопок действий */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* Стили для предпросмотра изображений */
+.image-preview {
+    max-width: 200px;
+    max-height: 200px;
+    object-fit: cover;
+    margin: 10px 0;
+}

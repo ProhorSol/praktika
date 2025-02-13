@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Система управления заявками</h1>
+                <div class="image-slider mb-4">
+                    <img src="{{ url_for('static', filename='images/slide1.jpg') }}" class="slide" alt="Слайд 1">
+                    <img src="{{ url_for('static', filename='images/slide2.jpg') }}" class="slide" alt="Слайд 2">
+                    <img src="{{ url_for('static', filename='images/slide3.jpg') }}" class="slide" alt="Слайд 3">
+                </div>
+                <p class="card-text">
+                    Добро пожаловать в нашу систему управления заявками. Здесь вы можете создавать и отслеживать
+                    статус ваших заявок, а также просматривать историю их выполнения.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h3 class="card-title">Решенные заявки</h3>
+                <div class="counter" id="solvedCounter">{{ solved_count }}</div>
+            </div>
+        </div>
+        
+        {% if current_user.is_authenticated %}
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="card-title">Быстрые действия</h3>
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('create_request') }}" class="btn btn-primary">Создать заявку</a>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Мои заявки</a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="card-title">Присоединяйтесь</h3>
+                <p class="card-text">Для создания заявок необходимо войти в систему.</p>
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('login') }}" class="btn btn-primary">Войти</a>
+                    <a href="{{ url_for('register') }}" class="btn btn-secondary">Зарегистрироваться</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
